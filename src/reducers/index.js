@@ -4,7 +4,9 @@ const game = (state = {}, action) => {
   switch (action.type) {
     case 'TAKE_TURN':
       let board = state.board.slice();
-      board[action.row][action.column] = state.turn;
+      let row = action.coords[0];
+      let column = action.coords[1];
+      board[row][column] = state.turn;
       return {
         ...state,
         turn: action.nextTurn

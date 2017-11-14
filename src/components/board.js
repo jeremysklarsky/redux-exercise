@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Button from 'antd/lib/button';
+import Square from './square';
 
 class Board extends Component {
 
   render() {
-    let { board,handleClick } = this.props;
+    let { board,handleClick,disabled } = this.props;
     return(
       <div className="board">
         {board.map((row, rowIndex) => {
@@ -13,14 +13,12 @@ class Board extends Component {
             <div key={rowIndex} className="row">
               {row.map((square, columnIndex)=>{
                 return (
-                  <Button
-                    className="square"
-                    disabled={Boolean(square) || this.props.disabled}
+                  <Square 
+                    disabled={Boolean(square) || disabled}
                     key={columnIndex}
-                    onClick={() => handleClick(rowIndex, columnIndex)}
-                    type="primary">
-                    {square || '\0'}
-                  </Button>
+                    label={square}
+                    coords={[rowIndex, columnIndex]}
+                    handleClick={handleClick}/>
                 )
               })}
             </div>

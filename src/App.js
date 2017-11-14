@@ -17,10 +17,10 @@ class App extends Component {
     };
   }
 
-  handleClick(row, column) {
+  handleClick(coords) {
     let nextTurn = this.props.turn === 'X' ? 'O' : 'X';
     let winner;
-    this.props.takeTurn(row, column, nextTurn);
+    this.props.takeTurn(coords, nextTurn);
 
     winner = checkTicTacToe(this.props.board);
     if (winner) {
@@ -44,7 +44,7 @@ class App extends Component {
           {this.state.label}
         </Button>
 
-        <Board disabled={gameOver} board={board} handleClick={(row, column)=>this.handleClick(row, column)}/>
+        <Board store={this.props.store} disabled={gameOver} board={board} handleClick={(coords)=>this.handleClick(coords)}/>
 
         <Scoreboard score={score}/>
 

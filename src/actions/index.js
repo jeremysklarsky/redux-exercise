@@ -1,7 +1,6 @@
-export const takeTurn = (row, column, nextTurn) => ({
+export const takeTurn = (coords, nextTurn) => ({
   type: 'TAKE_TURN',
-  row,
-  column,
+  coords,
   nextTurn
 });
 
