@@ -1,41 +1,39 @@
 import React, { Component } from 'react';
 import './App.css';
 import Button from 'antd/lib/button';
-import checkTicTacToe from './checkTicTacToe';
-import Board from './components/board';
+// import checkTicTacToe from './checkTicTacToe';
+import Board from './containers/board';
 import Scoreboard from './components/scoreboard';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { takeTurn, resetBoard, logVictory } from './actions';
+import { resetBoard, logVictory } from './actions';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      label: 'Reset'
+      label: 'Reset',
+      gameOver: false
     };
-  }
-
-  handleClick(coords) {
-    let nextTurn = this.props.turn === 'X' ? 'O' : 'X';
-    let winner;
-    this.props.takeTurn(coords, nextTurn);
-
-    winner = checkTicTacToe(this.props.board);
-    if (winner) {
-      this.setState({label: `${winner} wins!`});
-      this.props.logVictory(winner);
-    }    
   }
 
   resetBoard(){
     this.props.resetBoard();
-    this.setState({label:'Reset'});
+    this.setState({label:'Reset', gameOver:false});
+  }
+
+  handleWinner(winner) {
+    this.props.logVictory(winner);
+    this.setState({label: `${winner} wins!`, gameOver:true});
+  }
+
+  handleTie() {
+    this.setState({label:'Tie Game!', gameOver:true});
   }
 
   render() {
-    let {board,gameOver,score} = this.props;
+    let {board,score} = this.props;
     return (
       <div className="App">
         <Button
@@ -44,7 +42,7 @@ class App extends Component {
           {this.state.label}
         </Button>
 
-        <Board store={this.props.store} disabled={gameOver} board={board} handleClick={(coords)=>this.handleClick(coords)}/>
+        <Board gameOver={this.state.gameOver} onTie={()=>this.handleTie()} onWinning={(winner)=>this.handleWinner(winner)} board={board} />
 
         <Scoreboard score={score}/>
 
@@ -56,15 +54,12 @@ class App extends Component {
 const mapStateToProps = (state) => { 
   return {
     board: state.board,
-    turn: state.turn,
     score: state.score,
-    gameOver: state.gameOver
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    takeTurn: takeTurn,
     resetBoard: resetBoard,
     logVictory: logVictory
   }, dispatch);

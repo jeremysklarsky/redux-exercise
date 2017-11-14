@@ -21,8 +21,7 @@ const game = (state = {}, action) => {
       score[action.winner]++;
       return {
         ...state,
-        score: score,
-        gameOver: true
+        score: score
       }
     default:
       return state;
