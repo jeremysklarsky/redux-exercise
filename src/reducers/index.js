@@ -1,31 +1,61 @@
-import { getInitialState } from '../index';
+import { combineReducers } from "redux";
 
-const game = (state = {}, action) => {
+const blankBoard = () => [["", "", ""], ["", "", ""], ["", "", ""]];
+
+const board = (state = blankBoard(), action) => {
   switch (action.type) {
     case 'TAKE_TURN':
-      let board = state.board.slice();
-      let row = action.coords[0];
-      let column = action.coords[1];
-      board[row][column] = state.turn;
-      return {
-        ...state,
-        turn: action.nextTurn
-      };
+      let {turn,coords} = action;
+      let arr = JSON.parse(JSON.stringify(state));
+      let row = coords[0];
+      let column = coords[1];
+      arr[row][column] = turn
+      return arr;
     case 'RESET_BOARD':
-      let refreshedState = getInitialState();
-      refreshedState.score = state.score; //keep score the same
-      refreshedState.gameOver = false;
-      return refreshedState;
-    case 'LOG_VICTORY':
-      let {score} = state;
-      score[action.winner]++;
-      return {
-        ...state,
-        score: score
-      }
+      return blankBoard();
     default:
       return state;
   }
 };
 
-export default game;
+const turn = (state = 'X', action) => {
+  switch (action.type) {
+    case 'TAKE_TURN':
+      return state === 'X' ? 'O' : 'X';
+    case 'RESET_BOARD':
+      return 'X';
+    default:
+      return state;
+  }
+}
+ 
+const score = (state = {X: 0, O:0}, action) => {
+  switch (action.type) {
+    case 'LOG_VICTORY':
+      let score = Object.assign({}, state);
+      score[action.winner]++;
+      return score;
+    default:
+      return state;
+  }
+}
+
+const gameOver = (state = false, action) => {
+  switch (action.type) {
+    case "LOG_VICTORY":
+      return true;
+    case "RESET_BOARD":
+      return false;
+    default:
+      return state;
+  }
+};
+
+const rootReducer = combineReducers({
+  board,
+  turn,
+  score,
+  gameOver
+});
+
+export default rootReducer;

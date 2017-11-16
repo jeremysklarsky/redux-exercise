@@ -5,21 +5,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import reducer from './reducers';
 
-export const getInitialState = () => ({
-  turn: 'X',
-  board: [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
-  ],
-  score: {
-    'X':0,
-    'O':0
-  }
-});
-const store = createStore(reducer, getInitialState(),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const store = createStore(reducer);
 
 render(
   <Provider store={store}>

@@ -20,16 +20,16 @@ class App extends Component {
 
   resetBoard(){
     this.props.resetBoard();
-    this.setState({label:'Reset', gameOver:false});
+    this.setState({label:'Reset'});
   }
 
   handleWinner(winner) {
     this.props.logVictory(winner);
-    this.setState({label: `${winner} wins!`, gameOver:true});
+    this.setState({label: `${winner} wins!`});
   }
 
   handleTie() {
-    this.setState({label:'Tie Game!', gameOver:true});
+    this.setState({label:'Tie Game!'});
   }
 
   render() {
@@ -42,7 +42,7 @@ class App extends Component {
           {this.state.label}
         </Button>
 
-        <Board gameOver={this.state.gameOver} onTie={()=>this.handleTie()} onWinning={(winner)=>this.handleWinner(winner)} board={board} />
+        <Board onTie={()=>this.handleTie()} onWinning={(winner)=>this.handleWinner(winner)} board={board} />
 
         <Scoreboard score={score}/>
 

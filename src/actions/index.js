@@ -1,7 +1,7 @@
-export const takeTurn = (coords, nextTurn) => ({
+export const takeTurn = (coords, turn) => ({
   type: 'TAKE_TURN',
   coords,
-  nextTurn
+  turn
 });
 
 export const resetBoard = () => ({

@@ -19,17 +19,18 @@ class Board extends Component {
 
   handleClick(coords) {
     let {board,takeTurn,turn,onWinning,onTie} = this.props; 
-    let nextTurn = turn === 'X' ? 'O' : 'X';
     let winner;
     
-    takeTurn(coords, nextTurn);
+    takeTurn(coords, turn);
 
-    winner = checkTicTacToe(board);
-    if (winner) {
-      onWinning(winner);
-    } else if (isBoardFull(board)){
-      onTie();
-    }
+    requestAnimationFrame(()=>{
+      winner = checkTicTacToe(this.props.board);
+      if (winner) {
+        onWinning(winner);
+      } else if (isBoardFull(this.props.board)){
+        onTie();
+      }
+    })
   }
 
   render() {
@@ -60,7 +61,8 @@ class Board extends Component {
 // export default Board
 const mapStateToProps = (state) => { 
   return {
-    turn: state.turn
+    turn: state.turn,
+    gameOver: state.gameOver
   };
 };
 
